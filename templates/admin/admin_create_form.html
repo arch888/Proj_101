@@ -60,7 +60,14 @@
 		  <div class="input-group-prepend">
 		    <span class="input-group-text" id="basic-addon1">@</span>
 		  </div>
-		  <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+			  {% for f in form %}
+			  	{% for error in f.errors %}
+			  		<script type="text/javascript">
+			  			alert("{{error}}")
+			  		</script>
+			  	{% endfor %}
+			  	{{f}}
+			  {% endfor %}
 		</div>
 		<button type="submit" class="btn btn-dark">Create Model</button>
 	</form>
