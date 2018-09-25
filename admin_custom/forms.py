@@ -5,7 +5,9 @@ from .models import model_register as m_r
 
 
 class create_model(forms.Form):
+	
 	model_name=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control","placeholder":"Enter the Model Name"}))
+	model_image=forms.ImageField()
 	def clean_model_name(self):
 		name=self.cleaned_data.get("model_name")
 		qs=m_r.objects.filter(app_name=name)

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .forms import create_model
 import shutil
 import os
@@ -15,13 +15,13 @@ def admin_custom(request):
 
 
 def admin_create_model(request):
-	form_class=create_model(request.POST or None)
+	form_class=create_model(request.POST,request.FILES)
 	context={
 		"form":form_class,
 	}
 	if form_class.is_valid():
 		app_name=form_class.cleaned_data.get('model_name')
-		#object=m_r.objects.create(app_name=app_name)
+		object=m_r.objects.create(app_name=app_name,app_path=os.path.join(BASE_DIR, app_name))
 		#os.makedirs(os.path.join(BASE_DIR, app_name))
 		shutil.copytree(os.path.join(BASE_DIR, 'sampleapp'),os.path.join(BASE_DIR, app_name))
 		exact_file=os.path.join(BASE_DIR, app_name)+"/apps.py"
@@ -33,4 +33,15 @@ class SampleappConfig(AppConfig):
     name = '"""+app_name+"""'"""
 		file.write(content)
 		file.close()
+		return redirect('/models')
 	return render(request,"admin/admin_create_form.html",context)
+
+
+
+
+def models_list_view(request):
+	contents=m_r.objects.all()
+	context={
+		"obj":contents
+	}
+	return render(request,"admin/models_list_view.html",context)
